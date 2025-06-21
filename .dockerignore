@@ -44,7 +44,7 @@ logs/
 # Data files (will be persistent volumes)
 data/
 
-# Development files
-src/
-tsconfig.json
-.eslintrc.js
+# Development files (REMOVE THESE LINES)
+# src/
+# tsconfig.json
+# .eslintrc.js

@@ -3,37 +3,41 @@ FROM node:18-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies first (for better caching)
+# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
 
-# Copy source code
-COPY . .
-
-# Install dev dependencies for building
+# Install all dependencies (including dev dependencies for building)
 RUN npm ci
 
-# Build TypeScript
-RUN npm run build
+# Copy source code and config files
+COPY src/ ./src/
+COPY tsconfig.json ./
 
-# Deploy commands to Discord (only in production)
-ARG NODE_ENV=production
-RUN if [ "$NODE_ENV" = "production" ]; then npm run deploy-commands:prod; fi
+# Debug: List what files we have
+RUN ls -la
+RUN ls -la src/
+
+# Build TypeScript
+RUN npx tsc --version
+RUN npx tsc
+
+# Verify build output
+RUN ls -la dist/
 
 # Remove dev dependencies after building
 RUN npm prune --production
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S bot -u 1001 -G nodejs
+RUN addgroup -g pride -S pride && \
+    adduser -S pride -u pride -G pride
 
 # Create data directory and set permissions
 RUN mkdir -p /usr/src/app/data && \
-    chown -R bot:nodejs /usr/src/app
+    chown -R pride:pride /usr/src/app
 
-USER bot
+USER pride
 
-# Expose port (if needed for health checks)
+# Expose port
 EXPOSE 3000
 
 # Health check
