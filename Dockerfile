@@ -7,9 +7,13 @@ WORKDIR /usr/src/app
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S pridebot -u 1001 -G nodejs
 
-# Install app dependencies (including dev dependencies for building)
+# Copy package files
 COPY package*.json ./
+
+# Copy tsconfig if it exists
 COPY tsconfig*.json ./
+
+# Install dependencies
 RUN npm install
 RUN npm ci
 
@@ -19,8 +23,8 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-# Deploy commands to Discord (global commands)
-RUN npm run deploy-commands:prod
+# Deploy commands to Discord (only if deploy script exists)
+RUN if [ -f "dist/deploy-commands.js" ]; then npm run deploy-commands:prod; fi
 
 # Remove dev dependencies after building
 RUN npm prune --production
