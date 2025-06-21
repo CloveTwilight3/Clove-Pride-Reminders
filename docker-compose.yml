@@ -1,9 +1,27 @@
 services:
-  cloves-pride-reminders:
+  clove-bot:
     build: .
-    container_name: cloves-pride-reminders
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      - NODE_ENV=production
     volumes:
-      - ./data:/usr/src/app/data
+      - ./logs:/usr/src/app/logs
+      - ./data:/usr/src/app/data  # Add this line for persistent ticket data
+    networks:
+      - clove-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+networks:
+  clove-network:
+    driver: bridge
+
+volumes:
+  logs:
+  data: 
