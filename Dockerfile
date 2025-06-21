@@ -10,9 +10,6 @@ RUN addgroup -g 1001 -S nodejs && \
 # Copy package files
 COPY package*.json ./
 
-# Copy tsconfig if it exists
-COPY tsconfig*.json ./
-
 # Install dependencies
 RUN npm install
 RUN npm ci
