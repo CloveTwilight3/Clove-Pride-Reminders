@@ -9,7 +9,7 @@ RUN addgroup -g 1001 -S nodejs && \
 
 # Install app dependencies (including dev dependencies for building)
 COPY package*.json ./
-COPY tsconfig.json ./
+COPY tsconfig*.json ./
 RUN npm install
 RUN npm ci
 
