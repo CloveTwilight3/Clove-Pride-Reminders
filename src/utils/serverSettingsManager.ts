@@ -16,17 +16,23 @@ export interface ServerSettings {
 const dataDir = join(process.cwd(), 'data');
 if (!existsSync(dataDir)) {
   mkdirSync(dataDir, { recursive: true });
+  logger.info(`Created data directory: ${dataDir}`);
 }
 
 function readSettingsData(): Record<string, ServerSettings> {
   try {
+    logger.debug(`Attempting to read settings from: ${SETTINGS_FILE}`);
+    
     if (!existsSync(SETTINGS_FILE)) {
+      logger.info('Settings file does not exist, creating empty settings file');
       writeFileSync(SETTINGS_FILE, JSON.stringify({}, null, 2));
       return {};
     }
     
     const data = readFileSync(SETTINGS_FILE, 'utf-8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    logger.debug(`Successfully read settings: ${JSON.stringify(parsed)}`);
+    return parsed;
   } catch (error) {
     logger.error(`Error reading server settings: ${error}`);
     return {};
@@ -35,31 +41,49 @@ function readSettingsData(): Record<string, ServerSettings> {
 
 function writeSettingsData(settings: Record<string, ServerSettings>): void {
   try {
+    logger.debug(`Attempting to write settings to: ${SETTINGS_FILE}`);
+    logger.debug(`Settings data: ${JSON.stringify(settings, null, 2)}`);
+    
     writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2));
+    logger.info(`Successfully wrote settings to file`);
   } catch (error) {
     logger.error(`Error writing server settings: ${error}`);
   }
 }
 
 export function getServerSettings(guildId: string): ServerSettings {
+  logger.debug(`Getting settings for guild: ${guildId}`);
   const allSettings = readSettingsData();
   
-  return allSettings[guildId] || {
+  const settings = allSettings[guildId] || {
     guildId,
     prideRemindersEnabled: false,
     updatedAt: new Date().toISOString()
   };
+  
+  logger.debug(`Retrieved settings for guild ${guildId}: ${JSON.stringify(settings)}`);
+  return settings;
 }
 
 export function updateServerSettings(guildId: string, updates: Partial<ServerSettings>): void {
+  logger.debug(`Updating settings for guild ${guildId} with: ${JSON.stringify(updates)}`);
+  
   const allSettings = readSettingsData();
   
-  allSettings[guildId] = {
-    ...allSettings[guildId],
+  const currentSettings = allSettings[guildId] || {
     guildId,
-    ...updates,
+    prideRemindersEnabled: false,
     updatedAt: new Date().toISOString()
   };
+  
+  allSettings[guildId] = {
+    ...currentSettings,
+    ...updates,
+    guildId, // Ensure guildId is always set
+    updatedAt: new Date().toISOString()
+  };
+  
+  logger.debug(`New settings for guild ${guildId}: ${JSON.stringify(allSettings[guildId])}`);
   
   writeSettingsData(allSettings);
   logger.info(`Updated settings for guild ${guildId}`);

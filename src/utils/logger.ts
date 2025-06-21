@@ -9,8 +9,7 @@ export const logger = {
     console.warn(`[WARN] ${new Date().toISOString()} - ${message}`);
   },
   debug: (message: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.debug(`[DEBUG] ${new Date().toISOString()} - ${message}`);
-    }
+    // Always show debug for now to help with debugging
+    console.debug(`[DEBUG] ${new Date().toISOString()} - ${message}`);
   }
 };
