@@ -3,15 +3,8 @@ FROM node:18-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-# Create non-root user first
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S pridebot -u 1001 -G nodejs
-
-# Copy package files
+# Install app dependencies (including dev dependencies for building)
 COPY package*.json ./
-
-# Install dependencies
-RUN npm install
 RUN npm ci
 
 # Copy app source
@@ -20,28 +13,26 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-# Deploy commands to Discord (only if deploy script exists)
-RUN if [ -f "dist/deploy-commands.js" ]; then npm run deploy-commands:prod; fi
+# Deploy commands to Discord
+RUN npm run deploy-commands:prod
 
 # Remove dev dependencies after building
 RUN npm prune --production
 
-# Create data directory for persistent storage
-RUN mkdir -p data && \
-    chown -R pridebot:nodejs data
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S bot -u 1001
 
 # Change ownership of the app directory
-RUN chown -R pridebot:nodejs /usr/src/app
+RUN chown -R bot:nodejs /usr/src/app
+USER bot
 
-# Switch to non-root user
-USER pridebot
-
-# Expose port for health checks
+# Expose port (if needed for health checks)
 EXPOSE 3000
 
-# Health check endpoint
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "console.log('Pride Bot is running'); process.exit(0)" || exit 1
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "console.log('Bot is running')" || exit 1
 
 # Start the bot
 CMD ["npm", "start"]
