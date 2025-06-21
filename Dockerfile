@@ -13,9 +13,6 @@ COPY . .
 # Build TypeScript
 RUN npm run build
 
-# Deploy commands to Discord
-RUN npm run deploy-commands:prod
-
 # Remove dev dependencies after building
 RUN npm prune --production
 

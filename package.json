@@ -4,11 +4,11 @@
   "description": "A Discord bot that reminds servers about upcoming pride events",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "ts-node src/index.ts",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "deploy-commands": "ts-node src/deploy-commands.ts",
-    "deploy-commands:prod": "npm run build && node dist/deploy-commands.js"
+    "deploy-commands:prod": "if [ -f dist/deploy-commands.js ]; then node dist/deploy-commands.js; else echo 'deploy-commands.js not found, skipping'; fi"
   },
   "keywords": ["discord", "bot", "pride", "lgbtq", "reminders"],
   "author": "CloveTwilight3",
