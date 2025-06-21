@@ -1,0 +1,30 @@
+{
+  "name": "cloves-pride-reminders",
+  "version": "1.0.0",
+  "description": "A Discord bot that reminds servers about upcoming pride events",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "deploy-commands": "ts-node src/deploy-commands.ts",
+    "deploy-commands:prod": "npm run build && node dist/deploy-commands.js"
+  },
+  "keywords": ["discord", "bot", "pride", "lgbtq", "reminders"],
+  "author": "CloveTwilight3",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "@types/node-cron": "^3.0.11",
+    "typescript": "^5.4.5",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
