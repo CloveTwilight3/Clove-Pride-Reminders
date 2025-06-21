@@ -8,7 +8,8 @@ import { Command } from '../interfaces/Command';
 import { 
   addGlobalPrideEvent,
   removeGlobalPrideEvent,
-  getUpcomingGlobalEvents
+  getUpcomingGlobalEvents,
+  PrideEvent
 } from '../utils/prideEventManager';
 
 const command: Command = {
@@ -179,7 +180,7 @@ async function handleListEvents(interaction: ChatInputCommandInteraction) {
     .setColor(0xFF69B4)
     .setTimestamp();
   
-  events.slice(0, 10).forEach(event => {
+  events.slice(0, 10).forEach((event: PrideEvent) => {
     const eventDate = new Date(event.date);
     embed.addFields({
       name: event.title,

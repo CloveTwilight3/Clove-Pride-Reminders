@@ -2,8 +2,7 @@ import {
   Events, 
   Interaction, 
   Collection, 
-  PermissionsBitField,
-  MessageFlags
+  PermissionsBitField
 } from 'discord.js';
 import { Command } from '../interfaces/Command';
 import { logger } from '../utils/logger';
@@ -35,7 +34,7 @@ export default {
         if (!hasPermission) {
           await interaction.reply({
             content: '❌ You don\'t have permission to use this command!',
-            flags: MessageFlags.Ephemeral
+            ephemeral: true
           });
           return;
         }
@@ -59,7 +58,7 @@ export default {
           const timeLeft = (expirationTime - now) / 1000;
           await interaction.reply({
             content: `⏰ Please wait ${timeLeft.toFixed(1)} seconds before using this command again.`,
-            flags: MessageFlags.Ephemeral
+            ephemeral: true
           });
           return;
         }
@@ -78,7 +77,7 @@ export default {
       
       const errorMessage = {
         content: '❌ There was an error executing this command!',
-        flags: MessageFlags.Ephemeral
+        ephemeral: true
       };
 
       if (interaction.replied || interaction.deferred) {
