@@ -27,9 +27,9 @@ RUN ls -la dist/
 # Remove dev dependencies after building
 RUN npm prune --production
 
-# Create non-root user
-RUN addgroup -g pride -S pride && \
-    adduser -S pride -u pride -G pride
+# Create non-root user with pride theme
+RUN addgroup -g 1002 -S pride && \
+    adduser -S pride -u 1002 -G pride
 
 # Create data directory and set permissions
 RUN mkdir -p /usr/src/app/data && \
