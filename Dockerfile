@@ -9,6 +9,7 @@ RUN addgroup -g 1001 -S nodejs && \
 
 # Install app dependencies (including dev dependencies for building)
 COPY package*.json ./
+RUN npm install
 RUN npm ci
 
 # Copy app source
