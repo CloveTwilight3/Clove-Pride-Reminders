@@ -19,15 +19,17 @@ RUN npx tsc
 # Remove dev dependencies after building
 RUN npm prune --production
 
-# Create non-root user with pride theme
-RUN addgroup -g 1002 -S pride && \
-    adduser -S pride -u 1002 -G pride
+# Create non-root user with pride theme and UNIQUE UID for this bot
+RUN addgroup -g 1003 -S pride && \
+    adduser -S pride -u 1003 -G pride
 
-# Create data directory and set permissions BEFORE switching users
+# Create data directory with proper permissions BEFORE switching users
 RUN mkdir -p /usr/src/app/data && \
     chown -R pride:pride /usr/src/app && \
-    chmod -R 755 /usr/src/app/data
+    chmod -R 755 /usr/src/app && \
+    chmod -R 775 /usr/src/app/data
 
+# Switch to pride user
 USER pride
 
 # Expose port
