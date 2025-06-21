@@ -4,7 +4,7 @@
   "description": "A Discord bot that reminds servers about upcoming pride events",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ts-node src/index.ts",
+    "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "deploy-commands": "ts-node src/deploy-commands.ts",
