@@ -13,16 +13,8 @@ RUN npm ci
 COPY src/ ./src/
 COPY tsconfig.json ./
 
-# Debug: List what files we have
-RUN ls -la
-RUN ls -la src/
-
 # Build TypeScript
-RUN npx tsc --version
 RUN npx tsc
-
-# Verify build output
-RUN ls -la dist/
 
 # Remove dev dependencies after building
 RUN npm prune --production
@@ -31,9 +23,10 @@ RUN npm prune --production
 RUN addgroup -g 1002 -S pride && \
     adduser -S pride -u 1002 -G pride
 
-# Create data directory and set permissions
+# Create data directory and set permissions BEFORE switching users
 RUN mkdir -p /usr/src/app/data && \
-    chown -R pride:pride /usr/src/app
+    chown -R pride:pride /usr/src/app && \
+    chmod -R 755 /usr/src/app/data
 
 USER pride
 
