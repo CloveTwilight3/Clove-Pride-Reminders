@@ -10,9 +10,6 @@ RUN npm ci
 # Copy app source
 COPY . .
 
-# Build TypeScript
-RUN npm run build
-
 # Remove dev dependencies after building
 RUN npm prune --production
 
