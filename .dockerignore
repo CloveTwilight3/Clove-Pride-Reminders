@@ -1,0 +1,50 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output (will be created during build)
+dist/
+
+# Environment files (use docker-compose env_file instead)
+.env
+.env.local
+.env.production
+.env.development
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+*.md
+docs/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs (will be generated in container)
+logs/
+*.log
+
+# Data files (will be persistent volumes)
+data/
+
+# Development files
+src/
+tsconfig.json
+.eslintrc.js
